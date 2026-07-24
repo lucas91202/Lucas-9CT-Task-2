@@ -1,6 +1,15 @@
 # Requirements Outline
-## Functional
-## Non-Functional
+## Defining the Purpose
+### The Need
+
+### Proposed Solution
+I will design a stopwatch that can 
+## Identify Key Actions
+
+## Functional Requirements
+## Test Cases
+## Non-Functional Requirements
+
 
 # Design
 
