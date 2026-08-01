@@ -27,7 +27,7 @@ A sound sensor detects a clap when the buzzer is turned on, turning it off for 1
 | Temperature in optimal range | Temperature sensor reads 16-21°C | Green LED on |
 | Temperature in low range | Temperature sensor reads 15-16°C | Blue LED turns on |
 | Temperature too low | Temperature sensor reads <15°C | Red LED turns on and a minute later if no clap is detected, the buzzer turns on |
-|Humidity too high| Humidity sensor reads >50% | Red LED turns on and a minute later if no clap is detected, the buzzer turns on |
+|Humidity too high| Humidity sensor reads >60% | Red LED turns on and a minute later if no clap is detected, the buzzer turns on |
 | Humidity in high range | Humidity sensor reads 51-60% | Yellow LED turns on |
 | Humidity in optimal range | Humidity sensor reads 35-50% | Green LED on |
 | Humidity in low range | Humidity sensor reads 30-34% | Blue LED turns on |
