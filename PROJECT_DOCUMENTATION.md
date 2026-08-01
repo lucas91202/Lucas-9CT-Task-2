@@ -42,7 +42,7 @@ The robot will react to environment change every 5 seconds and detect claps ever
 The robot will measure temperature and humidity correct to 1 decimal place, being fairly accuracte. The robot will also detect a sharp clap and differentiate it through the frequency of the sound.
 
 # Design
-
+![Main process](Untitled-2026-04-30-1804.png)
 # Development and Integration
 
 # Testing and Debugging
