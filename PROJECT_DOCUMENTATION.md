@@ -43,6 +43,7 @@ The robot will measure temperature and humidity correct to 1 decimal place, bein
 
 # Design
 ![Main process](Untitled-2026-04-30-1804.png)
+![Subroutine](Untitled-2026-04-24-1440.png)
 # Development and Integration
 
 # Testing and Debugging
