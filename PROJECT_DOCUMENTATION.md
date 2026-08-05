@@ -42,8 +42,74 @@ The robot will react to environment change every 5 seconds and detect claps ever
 The robot will measure temperature and humidity correct to 1 decimal place, being fairly accuracte. The robot will also detect a sharp clap and differentiate it through the frequency of the sound.
 
 # Design
+## Flowcharts
 ![Main process](Untitled-2026-04-30-1804.png)
-![Subroutine](Untitled-2026-04-24-1440.png)
+![Subroutine](Untitled-2026-04-30-18042.png)
+![Subroutine](Untitled-04-30-1804.png)
+## Pseudocode
+```
+BEGIN low()
+    OUTPUT blue_Led.value(1)
+    WHILE blue_Led.value(1)
+        timer()
+        IF sound() == True THEN
+            IF timer() > 60 THEN
+            OUTPUT buzzer1.value(1)
+            ELSE
+                pass
+            ENDIF
+        ELSE
+            OUTPUT buzzer1.value(0)
+        ENDIF
+    ENDWHILE
+END low()
+
+BEGIN warning()
+    clear()
+    OUTPUT yellow_Led.value(1)
+END warning()
+
+BEGIN
+    WHILE True
+        READ temp
+        READ wet
+        IF temp >= 21 THEN
+            IF temp > 22 THEN
+                high()
+            ELSE
+                warning()
+            ENDIF
+        ELSE
+            IF temp <= 16 THEN
+                IF temp < 15 THEN
+                    low()
+                ELSE
+                    warning()
+                ENDIF
+            ELSE
+                optimal()
+            ENDIF
+        ENDIF
+        IF wet >= 51 THEN
+            IF wet > 60 THEN
+                high()
+            ELSE
+                warning()
+            ENDIF
+        ELSE
+            IF wet <= 34 THEN
+                IF wet < 30 THEN
+                    low()
+                ELSE
+                    warning()
+                ENDIF
+            ELSE
+                optimal()
+            ENDIF
+        ENDIF
+    ENDWHILE
+END
+```
 # Development and Integration
 
 # Testing and Debugging
