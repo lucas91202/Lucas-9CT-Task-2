@@ -110,8 +110,13 @@ BEGIN
     ENDWHILE
 END
 ```
-# Development and Integration
 
 # Testing and Debugging
-
+## Test Case 1: High(both temperature and humidity)
+### Choose a Test Case
+| Test Case | Input     | Expected Output   |
+|---------- |---------- |----------------   |
+|Temperature/humidity too high| Temperature sensor reads >22°C, Humidty sensor reads > 60% | Red LED turns on and a minute later if no clap is detected, the buzzer turns on |
+### Outline Your Plan
+Improvements that need to be made my current code include, making two functions for both temperature and humidity, code efficiency and organisation also needs to be fixed. 
 # Evaluation
