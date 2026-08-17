@@ -3,14 +3,14 @@ from time import sleep, time
 from dht import DHT11
 soundsensor = Pin(22,Pin.IN, Pin.PULL_UP) #Sound sensor
 buzzer1 = Pin(0,Pin.OUT) #Both buzzers for temperature and humidity
-buzzer2 = Pin(1,Pin.OUT)
+buzzer2 = Pin(15,Pin.OUT)
 sensor = DHT11(Pin(15, Pin.IN, Pin.PULL_UP)) #temperature and humidity sensor pin
-r1 = Pin(16,Pin.OUT) #First rgb light Pin setup
+r1 = Pin(18,Pin.OUT) #First rgb light Pin setup
 g1 = Pin(17,Pin.OUT)
-b1 = Pin(18,Pin.OUT)
-r2 = Pin(19,Pin.OUT) #Second rgb light Pin setup
+b1 = Pin(16,Pin.OUT)
+r2 = Pin(21,Pin.OUT) #Second rgb light Pin setup
 g2 = Pin(20,Pin.OUT)
-b2 = Pin(21,Pin.OUT)
+b2 = Pin(19,Pin.OUT)
 
 def timer():
     """Starts a timer using time.tick_ms. This code is taken and edited from 3.5 of the Raspberry Pi Pico tutorials."""
