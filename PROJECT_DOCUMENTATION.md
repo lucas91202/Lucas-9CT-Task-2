@@ -119,4 +119,68 @@ END
 |Temperature/humidity too high| Temperature sensor reads >22°C, Humidty sensor reads > 60% | Red LED turns on and a minute later if no clap is detected, the buzzer turns on |
 ### Outline Your Plan
 Improvements that need to be made my current code include, making two functions for both temperature and humidity, code efficiency and organisation also needs to be fixed. 
+### Adjust and Test Your Code
+#### Test #1 of code
+```
+def high():
+    if temp > 22:
+        r1.value(1)
+        g1.value(0)
+        b1.value(0)
+        timer()
+        while r1.value() == 1:
+            if sound() == True:
+                if checktimer() < 60000: #Check if is under 60 seconds
+                    buzzer1.value(0)
+                    disablebuzzer()
+                else:
+                    buzzer1.value(0)
+                    disablebuzzer()
+            else:
+                if checktimer() > 60000:
+                    if checkbuzzer():
+                        buzzer1.value(1)
+                    else:
+                        buzzer1.value(0) 
+    elif wet > 60:
+        r2.value(1)
+        g2.value(0)
+        b2.value(0)
+        timer()
+        while r2.value() == 1:
+            if sound() == True:
+                if checktimer() < 60000: #Check if is under 60 seconds
+                    buzzer2.value(0)
+                    disablebuzzer()
+                else:
+                    buzzer2.value(0)
+                    disablebuzzer()
+            else:
+                if checktimer() > 60000:
+                    buzzer2.value(1)
+                else:
+                    buzzer2.value(0)
+```
+#### Test #2 of code
+```
+def high1():
+    """Used for the temperature whenever it goes too high. Turns on a red LED and a buzzer a minute later if there is no sound."""
+    if r1.value() == 0: # #This is done to ensure the timer is enabled once, only when the red light first turns on. This code was done with AI as I could not figure out why the timer was never able to reach 1 minute.
+        r1.value(1)
+        g1.value(0)
+        b1.value(0)
+        timer1()
+        
+    if check_sound() == True:
+        buzzer1.value(0)
+        disablebuzzer1()
+    else:
+        if checktimer1() > 60000:
+            if checkbuzzer1() == True:
+                buzzer1.value(1)
+            else:
+                buzzer1.value(0)
+        else:
+            buzzer1.value(0)
+```
 # Evaluation

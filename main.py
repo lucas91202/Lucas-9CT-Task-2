@@ -12,26 +12,26 @@ r2 = Pin(21,Pin.OUT) #Second rgb light Pin setup
 g2 = Pin(20,Pin.OUT)
 b2 = Pin(19,Pin.OUT)
 
-def timer(ticks=time.ticks_ms):
+def timer():
     """Starts a timer using time.tick_ms. This code is taken and edited from 3.5 of the Raspberry Pi Pico tutorials."""
-    start = ticks()
-    return time.ticks_diff(ticks(), start)
+    global start
+    start = time.ticks_ms()
 
 
 def checktimer():
     """Calculates the time, checking what time the timer has reached since it has started. Again, code is 
     taken and edited from 3.5 of the Raspberry Pi Pico tutorials"""
-    finish = time.tick_ms() - start
+    finish = time.ticks_ms() - start
     return finish
 
 def disablebuzzer():
     """Acts as a timer function to disable the buzzer. This starts the buzzer."""
     global disable
-    disable = time.tick_ms()
+    disable = time.ticks_ms()
 
 def checkbuzzer():
     """Used whenever the buzzer is supposed to turn on. Checks if 10 minutes is up to allow the buzzer to turn on."""
-    current_time = time.tick_ms() - disable
+    current_time = time.ticks_ms() - disable
     if current_time < 600000:
         return False
     else:
@@ -39,21 +39,32 @@ def checkbuzzer():
     
 def high1():
     """Used for the temperature whenever it goes too high. Turns on a red LED and a buzzer a minute later if there is no sound."""
-    if b1.value() == 0 and g1.value() == 0: #This is done to ensure the timer is enabled once, only when the red light first turns on. This code was done with AI as I could not figure out why the timer was never able to reach 1 minute.
+    if r1.value() == 1: #This is done to ensure the timer is enabled once, only when the red light first turns on. This code was done with AI as I could not figure out why the timer was never able to reach 1 minute.
         r1.value(0)
         g1.value(1)
-        b1.value()
+        b1.value(1)
         timer()
-    if sound() == True:
-        buzzer1.value(0)
-        disablebuzzer()
+    if checkbuzzer(): #Checks if the buzzer is disabled or not
+        while checktimer() < 60000: #While the timer is at less than a minute check for sound
+            if sound() == True:
+                buzzer1.duty_u16(0)
+                disablebuzzer()
+                r1.value(1)
+                sleep(0.05)
+                break
+        if checkbuzzer(): #If theres no sound, ring a buzzer that can be turned off with sound
+            buzzer1.duty_u16(3768)
+            while buzzer1.duty_u16() > 0:
+                if sound() == True:
+                    buzzer1.duty_u16(0)
+                    disablebuzzer()
+                    r1.value(1)
+                    sleep(0.05)
+        else:
+            buzzer1.duty_u16(0) #If the buzzer is disabled then make sure its off
     else:
-        if checktimer() > 60000:
-            if checkbuzzer:
-                buzzer1.value(1)
-            else:
-                pass
-
+        buzzer1.duty_u16(0) 
+        
 def high2():
     """Used for the temperature whenever it goes too high. Turns on a red LED and a buzzer a minute later if there is no sound."""
     if r2.value() == 0: #This is done to ensure the timer is enabled once, only when the red light first turns on. This code was done with AI as I could not figure out why the timer was never able to reach 1 minute.
