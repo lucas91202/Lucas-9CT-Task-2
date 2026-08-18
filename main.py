@@ -12,10 +12,11 @@ r2 = Pin(21,Pin.OUT) #Second rgb light Pin setup
 g2 = Pin(20,Pin.OUT)
 b2 = Pin(19,Pin.OUT)
 
-def timer():
+def timer(ticks=time.ticks_ms):
     """Starts a timer using time.tick_ms. This code is taken and edited from 3.5 of the Raspberry Pi Pico tutorials."""
-    global start
-    start = time.ticks_ms()
+    start = ticks()
+    return time.ticks_diff(ticks(), start)
+
 
 def checktimer():
     """Calculates the time, checking what time the timer has reached since it has started. Again, code is 
@@ -38,10 +39,10 @@ def checkbuzzer():
     
 def high1():
     """Used for the temperature whenever it goes too high. Turns on a red LED and a buzzer a minute later if there is no sound."""
-    if r1.value() == 0: #This is done to ensure the timer is enabled once, only when the red light first turns on. This code was done with AI as I could not figure out why the timer was never able to reach 1 minute.
-        r1.value(1)
-        g1.value(0)
-        b1.value(0)
+    if b1.value() == 0 and g1.value() == 0: #This is done to ensure the timer is enabled once, only when the red light first turns on. This code was done with AI as I could not figure out why the timer was never able to reach 1 minute.
+        r1.value(0)
+        g1.value(1)
+        b1.value()
         timer()
     if sound() == True:
         buzzer1.value(0)
@@ -50,6 +51,23 @@ def high1():
         if checktimer() > 60000:
             if checkbuzzer:
                 buzzer1.value(1)
+            else:
+                pass
+
+def high2():
+    """Used for the temperature whenever it goes too high. Turns on a red LED and a buzzer a minute later if there is no sound."""
+    if r2.value() == 0: #This is done to ensure the timer is enabled once, only when the red light first turns on. This code was done with AI as I could not figure out why the timer was never able to reach 1 minute.
+        r2.value(1)
+        g2.value(0)
+        b2.value(0)
+        timer()
+    if sound() == True:
+        buzzer2.value(0)
+        disablebuzzer()
+    else:
+        if checktimer() > 60000:
+            if checkbuzzer:
+                buzzer2.value(1)
             else:
                 pass
 
