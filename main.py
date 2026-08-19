@@ -1,9 +1,12 @@
-from machine import Pin, Timer
-from time import sleep, time
+import utime
+from machine import Pin, PWM
+from time import sleep
 from dht import DHT11
 soundsensor = Pin(22,Pin.IN, Pin.PULL_UP) #Sound sensor
-buzzer1 = Pin(0,Pin.OUT) #Both buzzers for temperature and humidity
-buzzer2 = Pin(15,Pin.OUT)
+buzzer1 = PWM(0) #Both buzzers for temperature and humidity
+buzzer2 = PWM(14)
+buzzer1.freq(500)
+buzzer2.freq(600)
 sensor = DHT11(Pin(15, Pin.IN, Pin.PULL_UP)) #temperature and humidity sensor pin
 r1 = Pin(18,Pin.OUT) #First rgb light Pin setup
 g1 = Pin(17,Pin.OUT)
@@ -12,29 +15,65 @@ r2 = Pin(21,Pin.OUT) #Second rgb light Pin setup
 g2 = Pin(20,Pin.OUT)
 b2 = Pin(19,Pin.OUT)
 
-def timer():
+r1.value(1)
+g1.value(1)
+b1.value(1)
+r2.value(0)
+g2.value(0)
+b2.value(0)
+
+def timer1():
     """Starts a timer using time.tick_ms. This code is taken and edited from 3.5 of the Raspberry Pi Pico tutorials."""
-    global start
-    start = time.ticks_ms()
+    global start1
+    start1 = utime.ticks_ms()
 
-
-def checktimer():
+def checktimer1():
     """Calculates the time, checking what time the timer has reached since it has started. Again, code is 
     taken and edited from 3.5 of the Raspberry Pi Pico tutorials"""
-    finish = time.ticks_ms() - start
-    return finish
+    finish1 = utime.ticks_ms() - start1
+    return finish1
 
-def disablebuzzer():
+def disablebuzzer1():
     """Acts as a timer function to disable the buzzer. This starts the buzzer."""
-    global disable
-    disable = time.ticks_ms()
+    global disable1
+    disable1 = utime.ticks_ms()
 
-def checkbuzzer():
+def checkbuzzer1():
     """Used whenever the buzzer is supposed to turn on. Checks if 10 minutes is up to allow the buzzer to turn on."""
-    current_time = time.ticks_ms() - disable
-    if current_time < 600000:
-        return False
-    else:
+    try:
+        current_time1 = utime.ticks_ms() - disable1
+        if current_time1 < 600000:
+            return False
+        else:
+            return True
+    except:
+        return True
+    
+def timer2():
+    """Starts a timer using time.tick_ms. This code is taken and edited from 3.5 of the Raspberry Pi Pico tutorials."""
+    global start2
+    start2 = utime.ticks_ms()
+
+def checktimer2():
+    """Calculates the time, checking what time the timer has reached since it has started. Again, code is 
+    taken and edited from 3.5 of the Raspberry Pi Pico tutorials"""
+    finish2 = utime.ticks_ms() - start2
+    return finish2
+
+def disablebuzzer2():
+    """Acts as a timer function to disable the buzzer. This starts the buzzer."""
+    global disable2
+    disable2 = utime.ticks_ms()
+
+def checkbuzzer2():
+    """Used whenever the buzzer is supposed to turn on. Checks if 10 minutes is up to allow the buzzer to turn on."""
+    try:
+        current_time2 = utime.ticks_ms() - disable2
+        if current_time2 < 600000:
+            return False
+        else:
+            return True
+    except:
         return True
     
 def high1():
@@ -43,23 +82,24 @@ def high1():
         r1.value(0)
         g1.value(1)
         b1.value(1)
-        timer()
-    if checkbuzzer(): #Checks if the buzzer is disabled or not
-        while checktimer() < 60000: #While the timer is at less than a minute check for sound
+        timer1()
+    if checkbuzzer1(): #Checks if the buzzer is disabled or not
+        while checktimer1() < 60000: #While the timer is at less than a minute check for sound
             if sound() == True:
                 buzzer1.duty_u16(0)
-                disablebuzzer()
+                disablebuzzer1()
                 r1.value(1)
                 sleep(0.05)
                 break
-        if checkbuzzer(): #If theres no sound, ring a buzzer that can be turned off with sound
-            buzzer1.duty_u16(3768)
-            while buzzer1.duty_u16() > 0:
+        if checkbuzzer1(): #If theres no sound, ring a buzzer that can be turned off with sound
+            buzzer1.duty_u16(32768)
+            while True:
                 if sound() == True:
                     buzzer1.duty_u16(0)
-                    disablebuzzer()
+                    disablebuzzer1()
                     r1.value(1)
                     sleep(0.05)
+                    break
         else:
             buzzer1.duty_u16(0) #If the buzzer is disabled then make sure its off
     else:
@@ -71,23 +111,24 @@ def high2():
         r2.value(1)
         g2.value(0)
         b2.value(0)
-        timer()
-    if checkbuzzer(): #Checks if the buzzer is disabled or not
-        while checktimer() < 60000: #While the timer is at less than a minute check for sound
+        timer2()
+    if checkbuzzer2(): #Checks if the buzzer is disabled or not
+        while checktimer2() < 60000: #While the timer is at less than a minute check for sound
             if sound() == True:
                 buzzer2.duty_u16(0)
-                disablebuzzer()
+                disablebuzzer2()
                 r2.value(0)
                 sleep(0.05)
                 break
-        if checkbuzzer(): #If theres no sound, ring a buzzer that can be turned off with sound
-            buzzer2.duty_u16(3768)
-            while buzzer2.duty_u16() > 0:
+        if checkbuzzer2(): #If theres no sound, ring a buzzer that can be turned off with sound
+            buzzer2.duty_u16(32768)
+            while True:
                 if sound() == True:
                     buzzer2.duty_u16(0)
-                    disablebuzzer()
+                    disablebuzzer2()
                     r2.value(0)
                     sleep(0.05)
+                    break
         else:
             buzzer2.duty_u16(0) #If the buzzer is disabled then make sure its off
     else:
@@ -100,27 +141,29 @@ def low1():
         r1.value(1)
         g1.value(1)
         b1.value(0)
-        timer()
-    if checkbuzzer(): #Checks if the buzzer is disabled or not
-        while checktimer() < 60000: #While the timer is at less than a minute check for sound
+        timer1()
+    if checkbuzzer1(): #Checks if the buzzer is disabled or not
+        while checktimer1() < 60000: #While the timer is at less than a minute check for sound
             if sound() == True:
                 buzzer1.duty_u16(0)
-                disablebuzzer()
+                disablebuzzer1()
                 b1.value(1)
                 sleep(0.05)
                 break
-        if checkbuzzer(): #If theres no sound, ring a buzzer that can be turned off with sound
-            buzzer1.duty_u16(3768)
-            while buzzer1.duty_u16() > 0:
+        if checkbuzzer1(): #If theres no sound, ring a buzzer that can be turned off with sound
+            buzzer1.duty_u16(32768)
+            while True:
                 if sound() == True:
                     buzzer1.duty_u16(0)
-                    disablebuzzer()
+                    disablebuzzer1()
                     b1.value(1)
                     sleep(0.05)
+                    break
         else:
             buzzer1.duty_u16(0) #If the buzzer is disabled then make sure its off
     else:
         buzzer1.duty_u16(0) 
+        
 
 def low2():
     """Used for the humidity whenever it goes too high. Turns on a red LED and a buzzer a minute later if there is no sound."""
@@ -128,23 +171,24 @@ def low2():
         r2.value(0)
         g2.value(0)
         b2.value(1)
-        timer()
-    if checkbuzzer(): #Checks if the buzzer is disabled or not
-        while checktimer() < 60000: #While the timer is at less than a minute check for sound
+        timer2()
+    if checkbuzzer2(): #Checks if the buzzer is disabled or not
+        while checktimer2() < 60000: #While the timer is at less than a minute check for sound
             if sound() == True:
                 buzzer2.duty_u16(0)
-                disablebuzzer()
+                disablebuzzer2()
                 b2.value(0)
                 sleep(0.05)
                 break
-        if checkbuzzer(): #If theres no sound, ring a buzzer that can be turned off with sound
-            buzzer2.duty_u16(3768)
-            while buzzer2.duty_u16() > 0:
+        if checkbuzzer2(): #If theres no sound, ring a buzzer that can be turned off with sound
+            buzzer2.duty_u16(32768)
+            while True:
                 if sound() == True:
                     buzzer2.duty_u16(0)
-                    disablebuzzer()
+                    disablebuzzer2()
                     b2.value(0)
                     sleep(0.05)
+                    break
         else:
             buzzer2.duty_u16(0) #If the buzzer is disabled then make sure its off
     else:
@@ -157,9 +201,9 @@ def optimal1():
     buzzer1.duty_u16(0)
 
 def optimal2():
-    r1.value(0)
-    g1.value(1)
-    b1.value(0)
+    r2.value(0)
+    g2.value(1)
+    b2.value(0)
     buzzer2.duty_u16(0)
 
 def warning1():
@@ -181,17 +225,20 @@ def sound():
 
 def main():
     while True:
-        sensor.measure()
-        temp = sensor.temperature()
-        wet = sensor.humidity()
-        sound()
-        if temp > 22:
+        #sensor.measure()
+        #temp = sensor.temperature()
+        #wet = sensor.humidity()
+        temp = 16
+        wet = 16
+        print(temp)
+        print(wet)
+        if temp > 21:
             high1()
         elif temp == 21 or temp == 16:
             warning1()
-        elif temp >= 16 and temp <= 21:
+        elif temp > 16 and temp < 21:
             optimal1()
-        else:
+        elif temp < 16:
             low1()
 
         if wet > 60:
@@ -204,7 +251,7 @@ def main():
             low2()
         sleep(1)
 
-
+main()
 
 
 
