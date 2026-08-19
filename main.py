@@ -66,48 +66,112 @@ def high1():
         buzzer1.duty_u16(0) 
         
 def high2():
-    """Used for the temperature whenever it goes too high. Turns on a red LED and a buzzer a minute later if there is no sound."""
+    """Used for the humidity whenever it goes too high. Turns on a red LED and a buzzer a minute later if there is no sound."""
     if r2.value() == 0: #This is done to ensure the timer is enabled once, only when the red light first turns on. This code was done with AI as I could not figure out why the timer was never able to reach 1 minute.
         r2.value(1)
         g2.value(0)
         b2.value(0)
         timer()
-    if sound() == True:
-        buzzer2.value(0)
-        disablebuzzer()
+    if checkbuzzer(): #Checks if the buzzer is disabled or not
+        while checktimer() < 60000: #While the timer is at less than a minute check for sound
+            if sound() == True:
+                buzzer2.duty_u16(0)
+                disablebuzzer()
+                r2.value(0)
+                sleep(0.05)
+                break
+        if checkbuzzer(): #If theres no sound, ring a buzzer that can be turned off with sound
+            buzzer2.duty_u16(3768)
+            while buzzer2.duty_u16() > 0:
+                if sound() == True:
+                    buzzer2.duty_u16(0)
+                    disablebuzzer()
+                    r2.value(0)
+                    sleep(0.05)
+        else:
+            buzzer2.duty_u16(0) #If the buzzer is disabled then make sure its off
     else:
-        if checktimer() > 60000:
-            if checkbuzzer:
-                buzzer2.value(1)
-            else:
-                pass
+        buzzer2.duty_u16(0) 
 
                     
 def low1():
-    if b1.value() == 0: #Reusing the AI code to make sure the timer function is only turned on once when the LEDs are turned on.
-        r1.value(0)
-        g1.value(0)
-        b1.value(1)
+    """Used for the temperature whenever it goes too high. Turns on a red LED and a buzzer a minute later if there is no sound."""
+    if b1.value() == 1: #This is done to ensure the timer is enabled once, only when the red light first turns on. This code was done with AI as I could not figure out why the timer was never able to reach 1 minute.
+        r1.value(1)
+        g1.value(1)
+        b1.value(0)
         timer()
-    while buzzer1.value() == 1:
-        if sound() == True:
-            if timer() > 60:
-                buzzer1.value(1)
-            else:
-                buzzer1.value(0)
+    if checkbuzzer(): #Checks if the buzzer is disabled or not
+        while checktimer() < 60000: #While the timer is at less than a minute check for sound
+            if sound() == True:
+                buzzer1.duty_u16(0)
+                disablebuzzer()
+                b1.value(1)
+                sleep(0.05)
+                break
+        if checkbuzzer(): #If theres no sound, ring a buzzer that can be turned off with sound
+            buzzer1.duty_u16(3768)
+            while buzzer1.duty_u16() > 0:
+                if sound() == True:
+                    buzzer1.duty_u16(0)
+                    disablebuzzer()
+                    b1.value(1)
+                    sleep(0.05)
         else:
-            buzzer1.value(0)
+            buzzer1.duty_u16(0) #If the buzzer is disabled then make sure its off
+    else:
+        buzzer1.duty_u16(0) 
+
+def low2():
+    """Used for the humidity whenever it goes too high. Turns on a red LED and a buzzer a minute later if there is no sound."""
+    if b2.value() == 0: #This is done to ensure the timer is enabled once, only when the red light first turns on. This code was done with AI as I could not figure out why the timer was never able to reach 1 minute.
+        r2.value(0)
+        g2.value(0)
+        b2.value(1)
+        timer()
+    if checkbuzzer(): #Checks if the buzzer is disabled or not
+        while checktimer() < 60000: #While the timer is at less than a minute check for sound
+            if sound() == True:
+                buzzer2.duty_u16(0)
+                disablebuzzer()
+                b2.value(0)
+                sleep(0.05)
+                break
+        if checkbuzzer(): #If theres no sound, ring a buzzer that can be turned off with sound
+            buzzer2.duty_u16(3768)
+            while buzzer2.duty_u16() > 0:
+                if sound() == True:
+                    buzzer2.duty_u16(0)
+                    disablebuzzer()
+                    b2.value(0)
+                    sleep(0.05)
+        else:
+            buzzer2.duty_u16(0) #If the buzzer is disabled then make sure its off
+    else:
+        buzzer2.duty_u16(0) 
 
 def optimal1():
+    r1.value(1)
+    g1.value(0)
+    b1.value(1)
+    buzzer1.duty_u16(0)
+
+def optimal2():
     r1.value(0)
     g1.value(1)
     b1.value(0)
-    buzzer1.value(0)
+    buzzer2.duty_u16(0)
 
 def warning1():
-    r1.value(1)
-    g1.value(1)
-    b1.value(0)
+    r1.value(0)
+    g1.value(0)
+    b1.value(1)
+    buzzer1.duty_u16(0)
+
+def warning2():
+    r2.value(1)
+    g2.value(1)
+    b2.value(0)
 
 def sound():
     if soundsensor.value() == 1:
