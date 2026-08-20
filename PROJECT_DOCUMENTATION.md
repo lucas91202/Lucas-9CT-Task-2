@@ -444,14 +444,14 @@ def sound():
 I was partly successful in meeting the test case requirements as I was able to successfully turn off the buzzer with a clap, however, it did not end up turning off only to a sound from 2200 to 2800Hz. Steps I took to identify and fix errors include running parts of code on their own, like the disable and check buzzer functions, ensuring that they both successfully can disable and start the buzzers. The part that went particularly well during testing was the sound sensor successfully performing its expected actions. Challenging parts were disabling the buzzer as if code went in the wrong order or skipped parts, essential parts of checking and disabling the buzzer would create errors. Parts of the code that could be improved after testing include the sound sensor by fully utilising the sensor's capabilities and potentially improving issues caused if certain variables of the buzzer functions are undefined.
 
 # Evaluation
-## Peer Evaluation 1():
+## Peer Evaluation 1(Rory):
 |Plus|Minus|Implication|
 |-|-|-|
-| | | |
+| The system very effectively executes the need, through use of great wiring and set up, effective code and well thought out design. The use of sound, temperature and humidity sensors are used to effectively produce an output that gives feedback to its surrounds, meeting its requirments outline. | Some code within functions is ineffective, duplicating code where variables could be passed through. Docstrings could be used more to the advantage, by spreading over multiple lines instead of being used as comments. | The system functions well as it is, although if code was to be improved it would deliver function more effectivily|
 ## Peer Evaluation 2():
 |Plus|Minus|Implication|
 |-|-|-|
-| | | |
+| the design is quite clean and concise letting the fuction of the device work without any issues or obstructions from wiring. the sound sensor adds ease of use so that constantly pushing a button to disable the buzzers is pointless, so that the addition of the sound sensor is very useful| the use of two buzzers seem redundant as it feels as it should only buzz once both criterias have been fufilled as the lights feel that its the main signal | the color-changing lights is a wonderful addition as it not only saves on space but also makes the design look alot cleaner| extra addition: this product changed my life 9/10
 
 ## Final Evaluation Questions
 ### Functional Criteria
