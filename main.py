@@ -195,8 +195,8 @@ def tempwet(timer):
     """Used to give values for temperature and humidity. Code and sensor setup borrowed from https://sensorkit.joy-it.net/en/sensors/ky-015. Timer code used with temperature and humidity below borrowed from https://randomnerdtutorials.com/raspberry-pi-pico-interrupts-micropython/#blink-led-with-timer"""
     global temp, wet #Allow use for temp and wet variables through the whole project
     sensor.measure()
-    temp = 99#sensor.temperature()
-    wet = 1000#sensor.humidity()
+    temp = sensor.temperature()
+    wet = sensor.humidity()
     print(f'Temperature: {temp}\nHumidity: {wet}')
 
 tempwet(0) #Define the variables at the start of the project. 0 is used as a placeholder to prevent the code from failing.
